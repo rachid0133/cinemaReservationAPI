@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http.response import  JsonResponse
+from .models import Customer, Movie, Reservation
 
 # Create your views here.
 
@@ -17,3 +18,12 @@ def no_rest_no_model(request):
         }
     ]
     return JsonResponse(customer, safe=False)
+
+#2 With model data default Django and with no Rest-Framework
+def no_rest_with_model(request):
+    data = Customer.objects.all()
+    response = {
+        'customers': list(data.values('name', 'mobile'))
+    }
+    return JsonResponse(response)
+
