@@ -1,6 +1,9 @@
-from django.shortcuts import render
 from django.http.response import  JsonResponse
 from .models import Customer, Movie, Reservation
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status, filters
+from .serializers import CustomerSerializer, MovieSerializer, ReservationSerializer
 
 # Create your views here.
 
@@ -27,3 +30,43 @@ def no_rest_with_model(request):
     }
     return JsonResponse(response)
 
+#3 Function Based View(FBV) with Rest_Framework
+#3.1 GET POST
+@api_view(['GET', 'POST'])
+def Fbv_list(request):
+    #GET
+    if request.method == 'GET':
+        customers = Customer.objects.all()
+        serializer = CustomerSerializer(customers, many=True)
+        return Response(serializer.data)
+    #POST
+    elif request.method == 'POST':
+        serializer = CustomerSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
+
+
+# 3.2 GET PUT DELETE
+@api_view(['GET','PUT','DELETE'])
+def Fbv_Put_Delete(request, pk):
+    try:
+        customer = Customer.objects.get(pk=pk)
+    except Customer.DoesNotExists:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    #GET
+    if request.method == 'GET':
+        serializer = CustomerSerializer(customer)
+        return Response(serializer.data)
+    #PUT
+    elif request.method == 'PUT':
+        serializer = CustomerSerializer(customer, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    #DELETE
+    elif request.method == 'DELETE':
+        customer.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
