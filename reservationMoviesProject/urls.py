@@ -47,4 +47,7 @@ urlpatterns = [
 
     #7 viewsets
     path('restAPI/viewsets/', include(router.urls)),
+
+    # 8 find movie
+    path('fbv/findmovie/', views.find_movie),
 ]
