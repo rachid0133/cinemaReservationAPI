@@ -50,4 +50,7 @@ urlpatterns = [
 
     # 8 find movie
     path('fbv/findmovie/', views.find_movie),
+
+    # 9 new reservation
+    path('fbv/newreservation/', views.new_reservation),
 ]
