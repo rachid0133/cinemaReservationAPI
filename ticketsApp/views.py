@@ -116,4 +116,27 @@ class Cbv_list_pk(APIView):
         customer.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+#5 Mixins
+#5.1 mixins list GET POST
+class mixins_list(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
+    queryset = Customer.objects.all()
+    serializer_class = CustomerSerializer
+
+    def get(self, request):
+        return self.list(request)
+    def post(self, request):
+        return self.create(request)
+#5.2 mixins get put delete
+class mixins_pk(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin, generics.GenericAPIView):
+    queryset = Customer.objects.all()
+    serializer_class = CustomerSerializer
+
+    def get(self, request, pk):
+        return self.retrieve(request)
+    def put(self, request, pk):
+        return self.update(request)
+    def delete(self, request, pk):
+        return self.destroy(request)
+
+
 
