@@ -1,6 +1,12 @@
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from ticketsApp import views
+from rest_framework.routers import DefaultRouter
+
+router = DefaultRouter()
+router.register('customers', views.viewsets_customer)
+router.register('movies', views.viewsets_movie)
+router.register('reservations', views.viewsets_reservation)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -38,4 +44,7 @@ urlpatterns = [
 
     # 6.2 GET PUT DELETE from rest framework class based views(CBV) pk mixins
     path('restAPI/generics_list_customers/<int:pk>', views.generics_pk.as_view()),
+
+    #7 viewsets
+    path('restAPI/viewsets/', include(router.urls)),
 ]

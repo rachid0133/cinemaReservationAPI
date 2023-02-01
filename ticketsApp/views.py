@@ -3,7 +3,7 @@ from django.http.response import JsonResponse, Http404
 from .models import Customer, Movie, Reservation
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework import status, filters, generics, mixins
+from rest_framework import status, filters, generics, mixins, viewsets
 from rest_framework.views import APIView
 from .serializers import CustomerSerializer, MovieSerializer, ReservationSerializer
 
@@ -148,6 +148,22 @@ class generics_list(generics.ListCreateAPIView):
 class generics_pk(generics.RetrieveUpdateDestroyAPIView):
     queryset = Customer.objects.all()
     serializer_class = CustomerSerializer
+
+
+#7 viewsets
+class viewsets_customer(viewsets.ModelViewSet):
+    queryset = Customer.objects.all()
+    serializer_class = CustomerSerializer
+
+class viewsets_movie(viewsets.ModelViewSet):
+    queryset = Movie.objects.all()
+    serializer_class = MovieSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['movie']
+
+class viewsets_reservation(viewsets.ModelViewSet):
+    queryset = Reservation.objects.all()
+    serializer_class = ReservationSerializer
 
 
 
