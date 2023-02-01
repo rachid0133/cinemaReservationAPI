@@ -1,8 +1,10 @@
-from django.http.response import  JsonResponse
+from django.core.exceptions import ObjectDoesNotExist
+from django.http.response import JsonResponse, Http404
 from .models import Customer, Movie, Reservation
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework import status, filters
+from rest_framework import status, filters, generics, mixins
+from rest_framework.views import APIView
 from .serializers import CustomerSerializer, MovieSerializer, ReservationSerializer
 
 # Create your views here.
@@ -30,7 +32,7 @@ def no_rest_with_model(request):
     }
     return JsonResponse(response)
 
-#3 Function Based View(FBV) with Rest_Framework
+#3 Function Based Views(FBV) with Rest_Framework
 #3.1 GET POST
 @api_view(['GET', 'POST'])
 def Fbv_list(request):
@@ -53,7 +55,7 @@ def Fbv_list(request):
 def Fbv_Put_Delete(request, pk):
     try:
         customer = Customer.objects.get(pk=pk)
-    except Customer.DoesNotExists:
+    except ObjectDoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
     #GET
     if request.method == 'GET':
@@ -70,3 +72,48 @@ def Fbv_Put_Delete(request, pk):
     elif request.method == 'DELETE':
         customer.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+#4 Class Based Views(CBV) with Rest_Framework
+#4.1 GET POST
+class Cbv_list(APIView):
+    #GET
+    def get(self, request):
+        customers = Customer.objects.all()
+        serializer = CustomerSerializer(customers, many=True)
+        return Response(serializer.data)
+    #POST
+    def post(self, request):
+        serializer = CustomerSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status= status.HTTP_201_CREATED)
+        return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
+
+#4.2 GET PUT DELETE class based views -- pk
+class Cbv_list_pk(APIView):
+    #GET
+    def get_object(self, pk):
+        try:
+            return Customer.objects.get(pk=pk)
+        except ObjectDoesNotExist:
+            raise Http404
+
+    def get(self, request, pk):
+        customer = self.get_object(pk)
+        serializer = CustomerSerializer(customer)
+        return Response(serializer.data)
+    #PUT
+    def put(self, request, pk):
+        customer = self.get_object(pk)
+        serializer = CustomerSerializer(customer, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status= status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    #DELETE
+    def delete(self, request, pk):
+        customer = self.get_object(pk)
+        customer.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
