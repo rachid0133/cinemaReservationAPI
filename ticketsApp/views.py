@@ -123,6 +123,8 @@ class Cbv_list_pk(APIView):
 class mixins_list(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
     queryset = Customer.objects.all()
     serializer_class = CustomerSerializer
+    # permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
 
     def get(self, request):
         return self.list(request)
@@ -148,12 +150,14 @@ class generics_list(generics.ListCreateAPIView):
     # authentication_classes = [BasicAuthentication]
     # permission_classes = [IsAuthenticated]
 
+
 #6.2 GET PUT DELETE
 class generics_pk(generics.RetrieveUpdateDestroyAPIView):
     queryset = Customer.objects.all()
     serializer_class = CustomerSerializer
     # authentication_classes = [BasicAuthentication]
     # permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
 
 
 #7 viewsets

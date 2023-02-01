@@ -58,7 +58,7 @@ urlpatterns = [
     path('fbv/newreservation/', views.new_reservation),
 
     #10 Authentication
-    path('api-auth', include('rest_framework.urls')),
+    path('api-auth/', include('rest_framework.urls')),
 
     #11 Token authentication
     path('api-token-auth', obtain_auth_token)
