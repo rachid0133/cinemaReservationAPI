@@ -145,15 +145,15 @@ class mixins_pk(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.Destr
 class generics_list(generics.ListCreateAPIView):
     queryset = Customer.objects.all()
     serializer_class = CustomerSerializer
-    authentication_classes = [BasicAuthentication]
-    permission_classes = [IsAuthenticated]
+    # authentication_classes = [BasicAuthentication]
+    # permission_classes = [IsAuthenticated]
 
 #6.2 GET PUT DELETE
 class generics_pk(generics.RetrieveUpdateDestroyAPIView):
     queryset = Customer.objects.all()
     serializer_class = CustomerSerializer
-    authentication_classes = [BasicAuthentication]
-    permission_classes = [IsAuthenticated]
+    # authentication_classes = [BasicAuthentication]
+    # permission_classes = [IsAuthenticated]
 
 
 #7 viewsets

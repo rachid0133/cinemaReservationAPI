@@ -1,5 +1,7 @@
 from django.contrib import admin
 from django.urls import path, include
+from rest_framework.authtoken.views import obtain_auth_token
+
 from ticketsApp import views
 from rest_framework.routers import DefaultRouter
 
@@ -56,5 +58,8 @@ urlpatterns = [
     path('fbv/newreservation/', views.new_reservation),
 
     #10 Authentication
-    path('api_auth', include('rest_framework.urls'))
+    path('api-auth', include('rest_framework.urls')),
+
+    #11 Token authentication
+    path('api-token-auth', obtain_auth_token)
 ]
