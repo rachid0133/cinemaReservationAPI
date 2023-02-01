@@ -6,6 +6,8 @@ from rest_framework.response import Response
 from rest_framework import status, filters, generics, mixins, viewsets
 from rest_framework.views import APIView
 from .serializers import CustomerSerializer, MovieSerializer, ReservationSerializer
+from rest_framework.authentication import BasicAuthentication, TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
 
 # Create your views here.
 
@@ -143,11 +145,15 @@ class mixins_pk(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.Destr
 class generics_list(generics.ListCreateAPIView):
     queryset = Customer.objects.all()
     serializer_class = CustomerSerializer
+    authentication_classes = [BasicAuthentication]
+    permission_classes = [IsAuthenticated]
 
 #6.2 GET PUT DELETE
 class generics_pk(generics.RetrieveUpdateDestroyAPIView):
     queryset = Customer.objects.all()
     serializer_class = CustomerSerializer
+    authentication_classes = [BasicAuthentication]
+    permission_classes = [IsAuthenticated]
 
 
 #7 viewsets

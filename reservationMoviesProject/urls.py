@@ -3,6 +3,7 @@ from django.urls import path, include
 from ticketsApp import views
 from rest_framework.routers import DefaultRouter
 
+
 router = DefaultRouter()
 router.register('customers', views.viewsets_customer)
 router.register('movies', views.viewsets_movie)
@@ -53,4 +54,7 @@ urlpatterns = [
 
     # 9 new reservation
     path('fbv/newreservation/', views.new_reservation),
+
+    #10 Authentication
+    path('api_auth', include('rest_framework.urls'))
 ]
